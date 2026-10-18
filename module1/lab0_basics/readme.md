@@ -4,9 +4,9 @@
 
 | Deployment | Public IPv4 Address | Connection Method | Screenshot | Instance Terminated? |
 |---|---|---|---|---|
-| 1 | `54.204.198.153` | EC2 Connect / SSH | [Deployment 1](screenshots/deployment-1.png) | Yes |
+| 1 | `54.204.198.153` | EC2 Connect | [Deployment 1](screenshots/deployment-1.png) | Yes |
 | 2 | `54.92.154.187` | EC2 Connect | [Deployment 2](screenshots/deployment-2.png) | Yes |
-| 3 | `100.54.253.144` | EC2 Connect / SSH | [Deployment 3](screenshots/deployment-3.png) | Yes |
+| 3 | `100.54.253.144` | EC2 Connect | [Deployment 3](screenshots/deployment-3.png) | Yes |
 
 ## Deployment Process
 
