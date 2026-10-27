@@ -1,0 +1,7 @@
+Spotter: Zac Smith
+Teammates:
+  - Zac Smith
+  - Sid Owsley
+Team Meeting Schedule:
+  - Sunday 16:00–18:00 BRT
+  - Monday 20:00–22:00 BRT
