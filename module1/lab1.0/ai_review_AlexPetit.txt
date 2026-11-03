@@ -10,7 +10,6 @@ Q1: Why does `uptime -s` show a different time from
 UTC, Eastern Standard Time, and daylight saving time, and how can I verify
 the actual boot time?
 
-AI's answer, in my own words:
 The two commands do not necessarily display timestamps using the same time
 zone. In my screenshots, `uptime -s` appears to show the boot timestamp in
 UTC while `TZ='America/New_York' date` deliberately shows Eastern local
@@ -44,7 +43,6 @@ Q2: Why does running Uvicorn sometimes produce `command not found` on my
 EC2 instance, but work after activating the Python virtual environment?
 What exactly changes when I execute `source venv/bin/activate`?
 
-AI's answer, in my own words:
 Activating a Python virtual environment changes the current shell's command
 search environment, particularly by placing the project's `venv/bin`
 directory near the front of `PATH`. That allows the shell to find the
@@ -72,7 +70,6 @@ COBOL return codes 0, 4, 8, and 12? Why does a nonexistent account return
 4, an insufficient-funds payment return 8, and a missing data file return
 12?
 
-AI's answer, in my own words:
 These exit codes have meanings defined by the Balerica application rather
 than by all COBOL programs universally. Code 0 indicates success. Code 4
 means the requested account was not found. Code 8 means the application
@@ -103,7 +100,6 @@ the account ledger and the payment journal? If a $1.00 transaction returns
 `STATUS=POSTED`, should the fixed-width account balance automatically
 decrease by $1.00? Explain what determines whether that happens.
 
-AI's answer, in my own words:
 The fixed-width account ledger, `data/accounts.dat`, holds accounts and their
 balances. The payment journal, `data/payments.dat`, records attempted
 payments and their POSTED or REJECTED outcomes. The published standalone
@@ -131,7 +127,6 @@ runbook generates MT103 messages, so is that still representative of
 current banking practice? Explain whether ISO 20022 has replaced MT103
 and whether banks can still send MT103 messages.
 
-AI's answer, in my own words:
 For normal cross-border financial-institution payment instructions, the
 Swift coexistence period for legacy MT messaging and ISO 20022 ended on
 November 22, 2025. The normal modern format is ISO 20022; pacs.008 is the
