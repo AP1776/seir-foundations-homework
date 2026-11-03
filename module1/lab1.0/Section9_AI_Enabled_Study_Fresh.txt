@@ -1,0 +1,120 @@
+SEIR Foundations — Module 1, Lesson 1
+Section 9: AI-Enabled Study
+Filename: AI_enabled_study_lab1.0.txt
+Updated: November 3, 2026
+Student: Alex Petit
+Submission path: module1/lesson1_ec2/AI_enabled_study_lab1.0.txt
+
+=== Topic 1: Databases ===
+Read:    AWS, "What's the Difference Between Relational and Non-relational Databases?"
+         https://aws.amazon.com/compare/the-difference-between-relational-and-non-relational-databases/
+Watched: IBM Technology, "SQL vs. NoSQL: What's the difference?"
+         https://www.youtube.com/watch?v=Q5aTUc7c4jg
+AI used: ChatGPT (GPT-6), November 2, 2026
+Prompt(s) I asked the AI:
+  Prompts used in this ChatGPT conversation: "Complete section 9 of the homework for me and output as a text file per the specifications." and "Update section 9 as needed and output in a text file per the hw."
+  Research points addressed: What is a database? How are SQL and NoSQL different? How do I choose between SQLite, SQL Server, MariaDB/MySQL, PostgreSQL, and cloud-managed databases? Why is SQLite appropriate for the Balerica lab but not necessarily for a production bank?
+One AI claim checked against sources, and what I found:
+  Source check: NoSQL is not one database format; it includes key-value, document, and graph models. AWS's assigned article explicitly describes these different non-relational models. Reference: https://aws.amazon.com/compare/the-difference-between-relational-and-non-relational-databases/ (accessed 2026).
+
+Paragraph (minimum 5 sentences):
+A database is an organized way for software to save, retrieve, and update information, so an application can remember accounts, transactions, users, or other records after a program stops. Relational databases place information in tables with rows, columns, keys, and relationships, and they commonly use SQL, which stands for Structured Query Language. NoSQL is a broad label for alternatives such as key-value stores, document databases, and graph databases; it does not mean that every NoSQL product lacks queries or transactions. I would choose a database by looking at the shape of my data, the need for transactions and joins, expected traffic, operational effort, and the required availability. In AWS, RDS and Aurora are managed relational options, while DynamoDB is a managed key-value/document option. SQLite is lightweight and embedded in the application, which makes it convenient for small local projects and the Balerica teaching lab because there is no separate database server to administer. Microsoft SQL Server has strong integration with Microsoft's enterprise software, while MySQL and MariaDB are common choices for general web workloads, and PostgreSQL is especially attractive for standards-oriented SQL, advanced queries, extensions, and strong transactional features. PostgreSQL is powerful and flexible, but operating and tuning it, planning backups, and managing upgrades can demand more skill than SQLite. The Balerica runbook identifies data/bank.db as the SQLite system of record, a reasonable simplification for showing how the COBOL core and the API share records. A real bank would usually need much stronger provisions for concurrent workloads, replication, high availability, auditing, access control, recovery, and disaster recovery than an unreplicated SQLite file on one EC2 machine.
+
+Numbers + sources:
+- No quantitative adoption statistics are claimed in this topic.
+- Product categories and lab architecture: AWS comparison article (accessed 2026); Balerica lab runbook (2026 assignment):
+  https://github.com/BalericaAI/SEIR-Foundations/blob/main/module1/lesson1_ec2/API/runbook.md
+
+=== Topic 2: COBOL ===
+Read:    Wikipedia, "COBOL"
+         https://en.wikipedia.org/wiki/COBOL
+Watched: Fireship, "COBOL in 100 Seconds"
+         https://www.youtube.com/watch?v=7d7-etf-wNI
+AI used: ChatGPT (GPT-6), November 2, 2026
+Prompt(s) I asked the AI:
+  Prompts used in this ChatGPT conversation: "Complete section 9 of the homework for me and output as a text file per the specifications." and "Update section 9 as needed and output in a text file per the hw."
+  Research points addressed: Where did COBOL come from and where is it used? How much COBOL remains in use and can we verify an average engineer age? Why is replacing it difficult? Why does the Balerica ledger use an implied decimal?
+One AI claim checked against sources, and what I found:
+  Source check: A frequently repeated 2022 estimate describes roughly 775–850 billion lines of COBOL, not a measured count of COBOL "systems." The figure comes from Micro Focus-commissioned research reported by Vanson Bourne and Micro Focus. This is a survey-based estimate, not a universal census, and should not be converted into a number of applications. Sources:
+  https://www.vansonbourne.com/case-studies/size-of-cobol/
+  https://www.prnewswire.com/news-releases/cobol-market-shown-to-be-three-times-larger-than-previously-estimated-in-new-independent-survey-301475439.html
+
+Paragraph (minimum 5 sentences):
+COBOL means Common Business-Oriented Language, and it was developed in 1959 by an industry and government committee rather than invented by one person; Grace Hopper's earlier language work was an important influence (source: Wikipedia COBOL history, accessed 2026). It became common in mainframe environments because banks, insurers, businesses, and government agencies needed reliable batch processing, records, and financial calculations. COBOL still supports important production workloads, but there is no precise public census of how many distinct systems use it. A 2022 Micro Focus-commissioned survey of COBOL specialists and IT decision makers estimated 775–850 billion lines of COBOL in daily use, which illustrates scale but does not tell me the number of active programs or the total dollar value processed (source: Micro Focus/Vanson Bourne, 2022). I could not verify a trustworthy worldwide average age for COBOL engineers, so I would not present a popular global-age claim as fact; as a specific example, the GAO reported that the average age of developers and technical experts on one U.S. Defense Department legacy-system team was above 60, but that single team is not representative of the worldwide profession (source: U.S. GAO, 2025). Replacing COBOL can be risky because decades of business rules, unusual file layouts, batch jobs, downstream dependencies, and hard-to-reproduce edge cases may be hidden in the original programs. Organizations often get better short-term results by protecting the working core and exposing its capabilities through modern APIs rather than replacing everything at once. In Balerica, a payment amount such as 125.50 is shown as 000000012550 in a fixed-width record, with the final two digits representing cents (source: Balerica runbook, 2026). The implied decimal keeps each record a predictable width and supports exact decimal-style business arithmetic without storing a punctuation character, which made sense for classic financial files and remains useful for teaching how programs exchange structured records.
+
+Numbers + sources:
+- COBOL originated in 1959 — Wikipedia, "COBOL," History section (accessed 2026): https://en.wikipedia.org/wiki/COBOL
+- Estimated 775–850 billion lines of COBOL in use — Micro Focus-commissioned survey, published 2022; methodology discussion by Vanson Bourne (2022): https://www.vansonbourne.com/case-studies/size-of-cobol/
+- Payment example 125.50 -> 000000012550 and implied two-decimal-place field — Balerica lab runbook and reference, 2026: https://github.com/BalericaAI/SEIR-Foundations/blob/main/module1/lesson1_ec2/API/runbook.md
+- Average age above 60 for developers and technical experts on one Defense Department legacy-system team (NOT a global average) — U.S. GAO, 2025: https://files.gao.gov/reports/GAO-25-107795/index.html
+- Worldwide average engineer age: no reliable global figure verified; no number asserted.
+- Legacy staff shortages and modernization risks — U.S. GAO, 2025: https://files.gao.gov/reports/GAO-25-107795/index.html
+
+=== Topic 3: SWIFT ===
+Read:    Wikipedia, "SWIFT"
+         https://en.wikipedia.org/wiki/SWIFT
+Watched: a16z, "Foreign Exchange 101: What Happens When You Send Money Abroad?"
+         https://www.youtube.com/watch?v=eoXdyO9oGJc
+AI used: ChatGPT (GPT-6), November 2, 2026
+Prompt(s) I asked the AI:
+  Prompts used in this ChatGPT conversation: "Complete section 9 of the homework for me and output as a text file per the specifications." and "Update section 9 as needed and output in a text file per the hw."
+  Research points addressed: Does SWIFT move money? How do correspondent banks work? What do MT103, MT202, pacs.008, and pacs.009 mean? When did the cross-border MT/ISO coexistence end, and what remains in use?
+One AI claim checked against sources, and what I found:
+  Source check: Swift's official implementation FAQ says the CBPR+ coexistence period ended on November 22, 2025. This applies to cross-border payment instructions; it does NOT mean every MT message instantly disappeared. Swift separately notes continuing support for certain tracking messages, and banks continue transitioning other message categories. References:
+  https://www.swift.com/standards/iso-20022/iso-20022-faqs/implementation
+  https://www.usbank.com/corporate-and-commercial-banking/treasury-payment-solutions/iso-20022.html
+
+Paragraph (minimum 5 sentences):
+SWIFT, the Society for Worldwide Interbank Financial Telecommunication, is a bank-owned financial messaging cooperative founded in 1973 (source: Wikipedia SWIFT history, accessed 2026). It carries standardized instructions and information between financial institutions, but the messages themselves do not move settlement funds. Actual value moves through accounts and payment systems, often involving correspondent banks that hold accounts for other banks so an international payment can reach the receiving institution. Banks and other financial firms use SWIFT for customer transfers, interbank transfers, confirmations, statements, and operational messages. Alternatives such as China's CIPS, Russia's SPFS, domestic real-time payment rails, and some blockchain-oriented networks can handle parts of the problem, but they do not automatically reproduce SWIFT's global reach, shared standards, institutional connections, and compliance workflows. ISO 20022 supplies a richer structured data model and is commonly carried in XML, whereas older SWIFT MT messages use more compact, tag-based text fields. MT103 describes a customer credit transfer and MT202 an interbank transfer; their broadly corresponding ISO 20022 payment-message types are pacs.008 and pacs.009, respectively (source: Swift migration materials, 2025). Swift's CBPR+ coexistence period for cross-border payment instructions ended on November 22, 2025, so ISO 20022 became the standard for CBPR+ cross-border payment instructions, while limited contingency conversion and translation can still occur (source: Swift FAQ, 2026 access). Some older MT categories still exist, including tracking messages MT199 and MT299 and other non-instruction message families on separate migration schedules, so it would be misleading to say all MT traffic ended that day. Replacing SWIFT completely would require agreement across banks, payment infrastructures, regulations, fraud controls, and operational procedures, not just swapping a software library. Balerica's generator uses MT103 as a teaching example because the older format is readable and helps explain payment fields; switching the exercise to pacs.008 would require richer structured message creation, parsing, validation, field mappings, and tests rather than merely renaming the file.
+
+Numbers + sources:
+- SWIFT founded in 1973 — Wikipedia, "SWIFT," history (accessed 2026): https://en.wikipedia.org/wiki/SWIFT
+- CBPR+ coexistence ended November 22, 2025 — Swift official ISO 20022 implementation FAQ (accessed 2026): https://www.swift.com/standards/iso-20022/iso-20022-faqs/implementation
+- MT103 -> pacs.008 and MT202 -> pacs.009 (these are message identifiers, not numeric statistics) — Swift migration chart, September 2025: https://www.swift.com/swift-resource/252485/download
+- Continued MT199/MT299 tracking support — Swift implementation FAQ (accessed 2026): https://www.swift.com/standards/iso-20022/iso-20022-faqs/implementation
+- Selected other MT reporting formats on later migration schedules — U.S. Bank guidance (2026): https://www.usbank.com/corporate-and-commercial-banking/treasury-payment-solutions/iso-20022.html
+
+=== Topic 4: APIs ===
+Read:    MDN Web Docs, "An overview of HTTP"
+         https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview
+Watched: IBM Technology, "What is a REST API?"
+         https://www.youtube.com/watch?v=lsMQRaeKNDk
+AI used: ChatGPT (GPT-6), November 2, 2026
+Prompt(s) I asked the AI:
+  Prompts used in this ChatGPT conversation: "Complete section 9 of the homework for me and output as a text file per the specifications." and "Update section 9 as needed and output in a text file per the hw."
+  Research points addressed: What is an API? What is REST and how does it compare with SOAP, GraphQL, or gRPC? How do GET, POST, JSON, validation, and API security work in Balerica and Amazon Bedrock?
+One AI claim checked against sources, and what I found:
+  Source check: Balerica uses GET for status, accounts, transactions, and its Chewbacca endpoint, but POST for payments and the AI helper. The runbook endpoint table explicitly lists these methods. Reference: https://github.com/BalericaAI/SEIR-Foundations/blob/main/module1/lesson1_ec2/API/runbook.md (2026 assignment).
+
+Paragraph (minimum 5 sentences):
+An API, or application programming interface, is a defined way for programs to ask other software for information or actions without needing access to all of its internal code. The concept of program interfaces has many contributors, so there is no single inventor of all APIs, but Roy Fielding formally described the REST architectural style in his 2000 dissertation (source: University of California, Irvine, 2000). HTTP APIs are widely used across websites, mobile applications, business integrations, cloud platforms, and AI services; in Postman's 2025 survey, 82 percent of surveyed organizations reported adopting some level of an API-first approach, though that survey is not a census of all software systems (source: Postman, 2025). REST typically uses HTTP resources and methods, SOAP relies on a more formal XML messaging approach, GraphQL allows a client to ask for specific data shapes, and gRPC emphasizes efficient service-to-service remote procedure calls. A GET request should retrieve information without intentionally changing the requested resource, while a POST request submits information to be processed and can create a new state change. JSON is a widely used structured text format for exchanging named fields, objects, and arrays between an API client and server. Balerica's documented GET routes are /status, /accounts/{id}, /transactions, and /chewbacca; its POST routes are /payments and /ask (source: Balerica runbook, 2026). A payment belongs on POST because it is a transaction request with a body and can change state; a GET should not be designed to create a payment as a side effect. APIs also make AI adoption practical: an EC2 application can call an Amazon Bedrock service API without embedding the cloud model inside its own program. Security is difficult because clients can send incorrect or malicious fields, steal credentials, call endpoints excessively, or request other users' data, so servers need TLS, authentication, authorization, input validation, logging, limits, and careful error handling. The OWASP API Security Top 10 (2023 edition) highlights issues such as broken object-level authorization and broken authentication, reinforcing why even a supposedly friendly internal client should never be blindly trusted.
+
+Numbers + sources:
+- REST described by Roy Fielding in 2000 — Fielding dissertation, UC Irvine, 2000: https://ics.uci.edu/~fielding/pubs/dissertation/abstract.htm
+- 82% of surveyed organizations reported some API-first adoption — Postman, "State of the API 2025," 2025: https://www.postman.com/state-of-api/2025/
+- OWASP API Security Top 10, 2023 edition (title/version, not a prevalence figure) — OWASP, 2023: https://devguide.owasp.org/en/07-training-education/07-api-top-ten/
+- Balerica endpoint HTTP methods — Balerica runbook, 2026: https://github.com/BalericaAI/SEIR-Foundations/blob/main/module1/lesson1_ec2/API/runbook.md
+
+=== Topic 5: Where COBOL, SWIFT, APIs, and databases meet ===
+Read:    U.S. Government Accountability Office (GAO), "Information Technology: Agencies Need to Plan for Modernizing Critical Decades-Old Legacy Systems" (2025)
+         https://files.gao.gov/reports/GAO-25-107795/index.html
+Watched: "Modernizing COBOL: From Mainframe to API"
+         https://www.youtube.com/watch?v=-CI8hb-077E
+AI used: ChatGPT (GPT-6), November 2, 2026
+Prompt(s) I asked the AI:
+  Prompts used in this ChatGPT conversation: "Complete section 9 of the homework for me and output as a text file per the specifications." and "Update section 9 as needed and output in a text file per the hw."
+  Research points addressed: Trace a Balerica payment across the legacy and modern components. Explain API wrapping versus replacement, give industry examples, summarize GAO's risks, and describe how AI can help modernize COBOL without being trusted blindly.
+One AI claim checked against sources, and what I found:
+  Source check: The runbook explicitly diagrams a SWIFT traffic generator, FastAPI/JSON, a Python COBOL bridge, compiled COBOL programs, fixed-width files, and a SQLite system of record. The GAO's 2025 report independently warns about cyber vulnerabilities, hard-to-find skills, costs, and failure to meet new mission needs. References:
+  https://github.com/BalericaAI/SEIR-Foundations/blob/main/module1/lesson1_ec2/API/runbook.md
+  https://files.gao.gov/reports/GAO-25-107795/index.html
+
+Paragraph (minimum 5 sentences):
+Balerica demonstrates how old and new technologies can cooperate instead of being treated as separate worlds. According to the runbook's architecture, its SWIFT traffic generator prepares a payment message, the FastAPI layer receives the request over HTTP using JSON, and a Python bridge invokes a compiled COBOL program to check the account and decide whether to post the payment. The COBOL programs read or write fixed-width records such as accounts.dat and payments.dat, and the lab's export and ingestion process connects those records to the SQLite system of record at data/bank.db; that is the documented flow, not a claim that every stage was independently proven by the screenshots. COBOL and fixed-width files represent the legacy processing style, while FastAPI, JSON, and a database interface provide more modern ways to connect users and services. Many organizations prefer wrapping a stable legacy application with an API because a complete replacement could break complex business rules, interrupt operations, and require costly data conversions. In finance, established bank payment processing can sit behind a modern API; in healthcare, the Indian Health Service is replacing a clinical and administrative legacy system built with MUMPS, illustrating the same modernization issues even though that example is not COBOL (source: GAO, 2025). In education, Northeastern University's documented migration from mainframe IDMS and COBOL VSAM assets toward an Oracle environment shows why universities also face legacy data and skills challenges (source: Astadia case study, accessed 2026). In government, the U.S. Internal Revenue Service still relies on legacy COBOL-based systems to provide taxpayer services and process tax records, showing how public operations depend on old programs (source: GAO, 2025). The GAO's 2025 report identifies risks including unsupported software, security weaknesses, expensive maintenance, shortages of specialized staff, and difficulty meeting changing requirements. AI tools such as IBM watsonx Code Assistant for Z can help explain COBOL, document dependencies, suggest refactoring, and assist with translation into Java, but they cannot be assumed to preserve every financial calculation or obscure business rule correctly (source: IBM product documentation, accessed 2026). My main takeaway is that a safe modernization plan needs testing against the original results, security review, domain experts, migration controls, and a rollback strategy rather than an unverified AI-generated rewrite.
+
+Numbers + sources:
+- GAO assessment of legacy-system modernization risks — U.S. GAO, 2025: https://files.gao.gov/reports/GAO-25-107795/index.html
+- U.S. Internal Revenue Service legacy COBOL example — U.S. GAO, 2025: https://files.gao.gov/reports/GAO-25-107795/index.html
+- Northeastern University legacy modernization example — Astadia case study (date not stated; accessed 2026): https://www.astadia.com/case-studies/northeastern-university
+- AI-assisted explanation, refactoring, transformation, and validation capabilities — IBM watsonx Code Assistant for Z documentation (accessed 2026): https://www.ibm.com/docs/en/watsonx/watsonx-code-assistant-4z/2.x?topic=welcome-about-watsonx-code-assistant-z
+- Balerica architecture and example file formats — Balerica lab runbook, 2026: https://github.com/BalericaAI/SEIR-Foundations/blob/main/module1/lesson1_ec2/API/runbook.md

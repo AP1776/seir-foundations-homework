@@ -1,0 +1,201 @@
+SEIR Foundations — Module 1 / Lesson 1
+Section 5 — AI Review of the Balerica Legacy Bank Runbook
+Student: Alex Petit
+
+AI used = ChatGPT
+Conversation share link = https://chatgpt.com/share/6aea1811-48dc-83ea-a27e-ad1516966291
+
+Q1: Why does `uptime -s` show a different time from
+`TZ='America/New_York' date` on my AWS EC2 instance? How does Linux handle
+UTC, Eastern Standard Time, and daylight saving time, and how can I verify
+the actual boot time?
+
+AI's answer, in my own words:
+The two commands do not necessarily display timestamps using the same time
+zone. In my screenshots, `uptime -s` appears to show the boot timestamp in
+UTC while `TZ='America/New_York' date` deliberately shows Eastern local
+time. October 31, 2026 was EDT (UTC-4), while November 1, 2026 after the
+daylight saving time change was EST (UTC-5). ChatGPT also pointed out that
+my screenshots came from different EC2 instances, so I should not compare
+their boot times as if they were from the same machine. The screenshot
+evidence is consistent with a UTC system time zone, although the configured
+time zone would be checked directly with `timedatectl status`.
+
+How I checked it (ran a command, re-read the runbook, asked my spotter, etc.):
+I asked ChatGPT to validate the answer against the October 31 and November 1
+screenshots. The October 31 screenshot identifies instance
+i-017e3952a19fa9e51, shows 4:17:22 PM EDT locally, and shows `uptime -s`
+as 2026-10-31 18:18:43. Interpreted as UTC, that boot time is 2:18:43 PM
+EDT. The November 1 screenshot identifies instance i-011f1c3aa536fe037,
+shows 4:50:45 PM EST locally, and shows `uptime -s` as
+2026-11-01 21:40:13. That is 4:40:13 PM EST. The resulting elapsed times
+agree with what the screenshots show. ChatGPT also provided reproducible
+conversion commands:
+
+  TZ='America/New_York' date -d '2026-10-31 18:18:43 UTC' '+%Y-%m-%d %H:%M:%S %Z %z'
+  TZ='America/New_York' date -d '2026-11-01 21:40:13 UTC' '+%Y-%m-%d %H:%M:%S %Z %z'
+
+The runbook's Step 0 identity procedure supplies the EC2 context; the
+UTC-to-Eastern conversion is based on Linux time-zone rules. ChatGPT's
+follow-up distinguished a time-zone conversion from evidence of a faulty
+instance clock.
+
+Q2: Why does running Uvicorn sometimes produce `command not found` on my
+EC2 instance, but work after activating the Python virtual environment?
+What exactly changes when I execute `source venv/bin/activate`?
+
+AI's answer, in my own words:
+Activating a Python virtual environment changes the current shell's command
+search environment, particularly by placing the project's `venv/bin`
+directory near the front of `PATH`. That allows the shell to find the
+Uvicorn executable already installed in the project environment. Using
+`source` is important because it applies the activation script in the
+current shell, where the subsequent Uvicorn command runs. Activation does
+not itself install packages, launch the server, or permanently modify the
+instance for future sessions.
+
+How I checked it (ran a command, re-read the runbook, asked my spotter, etc.):
+The Run 4 screenshot showed `-bash: uvicorn: command not found` before I
+entered the project directory and activated its virtual environment. It
+then showed `cd /opt/balerica-bank`, `source venv/bin/activate`, the `(venv)`
+prompt, and a successful `Application startup complete.` message. I asked
+ChatGPT whether its explanation contradicted the screenshot. It clarified
+that I changed directories AND activated the environment between attempts;
+the screenshot alone does not isolate which individual change was decisive.
+The runbook's Uvicorn troubleshooting and Python's documented `PATH`
+behavior support activation as the expected mechanism. ChatGPT suggested
+`command -v uvicorn` before and after activation as a more controlled
+follow-up check.
+
+Q3: In the Balerica Legacy Bank application, what is the difference between
+COBOL return codes 0, 4, 8, and 12? Why does a nonexistent account return
+4, an insufficient-funds payment return 8, and a missing data file return
+12?
+
+AI's answer, in my own words:
+These exit codes have meanings defined by the Balerica application rather
+than by all COBOL programs universally. Code 0 indicates success. Code 4
+means the requested account was not found. Code 8 means the application
+rejected a payment for breaking a business rule, such as a zero amount or
+insufficient funds. Code 12 means a technical or environmental problem
+prevented the operation. In my code-12 example, the executable ran from
+the wrong working directory and could not resolve the relative path
+`data/accounts.dat`; that is not proof that the project ledger was deleted.
+
+How I checked it (ran a command, re-read the runbook, asked my spotter, etc.):
+I asked ChatGPT to compare the explanation with the four return-code
+screenshots and the runbook's return-code table. The files `cobol_rc0.jpg`,
+`cobol_rc4.jpg`, `cobol_rc8.jpg`, and `cobol_rc12.jpg` show, respectively:
+
+  0  — Account 100001 was found; Alice Johnson was ACTIVE, with balance 4037.64.
+  4  — Account 999999 returned ERROR=ACCOUNT NOT FOUND.
+  8  — A $0.00 payment was REJECTED for AMOUNT MUST BE GREATER THAN ZERO,
+       and a $999,999.99 payment was REJECTED for INSUFFICIENT FUNDS.
+  12 — A lookup launched from the home directory returned
+       ERROR=CANNOT OPEN data/accounts.dat and FILE-STATUS=35.
+
+Those results agree with the return-code table in the runbook's Step 3.
+The working-directory detail explains why the code-12 test demonstrated a
+relative-path problem rather than permanent loss of the account ledger.
+
+Q4: In a legacy COBOL banking application, what is the difference between
+the account ledger and the payment journal? If a $1.00 transaction returns
+`STATUS=POSTED`, should the fixed-width account balance automatically
+decrease by $1.00? Explain what determines whether that happens.
+
+AI's answer, in my own words:
+The fixed-width account ledger, `data/accounts.dat`, holds accounts and their
+balances. The payment journal, `data/payments.dat`, records attempted
+payments and their POSTED or REJECTED outcomes. The published standalone
+COBOL payment program checks the account and writes a journal record, but
+does not rewrite the account's balance. In the published FastAPI/Python
+bridge, an accepted API payment follows a different path that updates the
+SQLite account balance and exports the fixed-width ledger again. Therefore
+`STATUS=POSTED` alone proves neither a $1.00 debit nor that a balance update
+failed. The execution path and actual subsequent balance are what matter.
+
+How I checked it (ran a command, re-read the runbook, asked my spotter, etc.):
+My journal records `TXN-AP-0003` as POSTED for $1.00, but a later lookup
+for Alice Johnson (account 100001) still reported $4,037.64. Her raw ledger
+balance field was `000000403764`, also $4,037.64. I challenged ChatGPT
+with this result, and it agreed that posting a journal record is not
+sufficient evidence of a corresponding debit. Its explanation pointed to
+the published COBOL `payment_post.cob` and the Python `app/cobol_bridge.py`:
+the former journals the verdict, while the latter has an additional
+database-update/export path. This matched the distinction I could see
+between my journal and account-balance results.
+
+Q5: As of November 2026, is SWIFT MT103 still the primary message format
+used for international bank-to-bank payments? The Balerica Legacy Bank
+runbook generates MT103 messages, so is that still representative of
+current banking practice? Explain whether ISO 20022 has replaced MT103
+and whether banks can still send MT103 messages.
+
+AI's answer, in my own words:
+For normal cross-border financial-institution payment instructions, the
+Swift coexistence period for legacy MT messaging and ISO 20022 ended on
+November 22, 2025. The normal modern format is ISO 20022; pacs.008 is the
+relevant customer credit-transfer message corresponding broadly to MT103.
+However, saying that absolutely no MT103 messages can still be submitted
+would be too broad. Eligible MT103 instructions can be handled through
+Swift's temporary contingency conversion mechanism, and some other
+arrangements, including certain closed user groups, have their own rules.
+The Balerica lab is an example of legacy-format integration, not proof of
+real-world Swift network transmission: its generator builds MT103-style
+text but submits JSON payment data to the local FastAPI `/payments` API.
+
+How I checked it (ran a command, re-read the runbook, asked my spotter, etc.):
+I checked the migration explanation against Swift's official ISO 20022
+implementation and conversion guidance and the Balerica runbook's Step 6
+SWIFT traffic exercise. I challenged the original explanation for being
+vague about the exceptions. ChatGPT identified an actual example, a Market
+Infrastructure Closed User Group, plus eligible MT103 contingency conversion.
+I then asked it to verify the Balerica traffic-generator source. In the
+follow-up it examined `swift/traffic_generator.py` and located the code
+building MT103-style text, the `http_json()` helper, and the HTTP POST to
+`/payments`. That showed why the lab's traffic demonstration does not
+establish membership in Swift, use of a special agreement, or real interbank
+message delivery.
+
+Where the AI was wrong, vague, or out of date:
+The most useful example came from Question 5. ChatGPT's first discussion
+of the remaining situations where MT103 could be used was too broad to
+show what the exception actually looked like. I challenged it with:
+
+  "This answer is too vague. What would a concrete example of those
+   'special agreements' to continue using the old standard be, and how
+   would Balerica Legacy Bank most likely be implementing them?"
+
+The follow-up supplied a named case (a Market Infrastructure Closed User
+Group) and a second mechanism (Swift's contingency conversion service),
+then explained that Balerica's published generator did not demonstrate
+either mechanism. I asked "Verify that file," prompting an inspection of
+the source code showing MT103-style text generation and HTTP/JSON payment
+submission rather than live Swift transmission. I recognized the vagueness
+because a generic reference to "special agreements" did not establish a
+specific permitted arrangement or how the lab implemented one. Requesting
+an example and the program's code made the claim testable.
+
+A second, smaller correction came from Question 2: ChatGPT initially
+attributed the Uvicorn before/after result entirely to virtual-environment
+activation. After I asked it to compare its statement with the Run 4
+screenshot, it acknowledged that `cd /opt/balerica-bank` also happened
+before the successful run. That was a useful reminder not to claim an
+experiment isolated one cause when two steps changed at once.
+
+What I learned:
+Checking an AI answer means more than seeing whether it sounds right.
+I learned to compare explanations with screenshot timestamps, exact shell
+return codes, ledger fields, and journal entries; to ask which application
+component is responsible for a claimed result; and to demand a concrete
+source or code path when a technical answer is vague.
+
+References:
+Balerica Legacy Bank Student Runbook:
+https://github.com/BalericaAI/SEIR-Foundations/blob/main/module1/lesson1_ec2/API/runbook.md
+Balerica SWIFT traffic generator:
+https://github.com/BalericaAI/SEIR-Foundations/blob/main/module1/lesson1_ec2/API/swift/traffic_generator.py
+Swift ISO 20022 implementation FAQ:
+https://www.swift.com/standards/iso-20022/iso-20022-faqs/implementation
+Swift MT-to-ISO 20022 conversion guidance:
+https://www.swift.com/es/node/310059

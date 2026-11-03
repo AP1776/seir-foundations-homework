@@ -1,0 +1,33 @@
+SEIR Foundations — Module 1, Lesson 1
+Section 6 — Spotter Check-In
+Student: Alex Petit
+
+SPOTTER REPORT — Section 6
+Spotter = Zac Smith
+
+5 things my spotter learned while working on the lab / homework:
+
+1. My learning point one:
+I learned how to connect to EC2 instances from Windows Git Bash, troubleshoot SSH key paths, and check an instance ID and boot time using ec2-metadata and uptime.
+
+2. My learning point two:
+I learned how to clone the instructor's repository, manually install Balerica Bank, activate a Python virtual environment, and launch the FastAPI application with Uvicorn.
+
+3. My learning point three:
+I learned to check COBOL exit codes with echo $?. I reproduced code 0 for success, 4 for an account not found, 8 for a rejected payment, and 12 for a missing-file or environment problem.
+
+4. My learning point four:
+I learned how to decode Alice Johnson's fixed-width account record using grep and cut. I posted the $125.50 transaction TXN-ZS-0005, found its journal entry, and checked that the account lookup still showed a $5,000.00 balance.
+
+5. My learning point five:
+I learned to troubleshoot a process already using port 8000, distinguish commands run locally from those run on EC2, and capture the instance identification and successful Uvicorn startup together for evidence.
+
+I am the spotter for = Sid Owsley
+
+5 things I learned that I shared with them:
+1. The ID line combines identity, local timestamp, instance ID, and UTC boot time; the local timestamp can differ from UTC and must account for Eastern Daylight versus Standard Time.
+2. Each required repetition must use a fresh EC2 instance, and no more than three of the seven run screenshots may have the same local date.
+3. The application starts from `/opt/balerica-bank` after activating the Python virtual environment, and Uvicorn must show `Application startup complete.` in the screenshot.
+4. A public DNS hostname identifies the network destination for SSH, while an instance ID uniquely identifies the AWS EC2 resource for the evidence table.
+5. COBOL return codes carry meaning: 0 indicates success, 4 account-not-found, 8 a business rejection, and 12 an environment-related failure in this lab's test cases.
+
